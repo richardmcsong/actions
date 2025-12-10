@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { GitHub } from '@actions/github/lib/utils';
 import {
   Repository,
   ProjectV2SingleSelectField,
@@ -26,7 +27,7 @@ interface Options {
 }
 
 export async function syncProjectBoard(
-  client: ReturnType<typeof github.getOctokit>,
+  client: InstanceType<typeof GitHub>,
   options: Options,
   log = core.info,
 ) {
@@ -57,7 +58,7 @@ export async function syncProjectBoard(
 }
 
 async function addToBoard(
-  client: ReturnType<typeof github.getOctokit>,
+  client: InstanceType<typeof GitHub>,
   options: Options,
   log = core.info,
 ) {
@@ -135,7 +136,7 @@ async function addToBoard(
 }
 
 async function removeFromBoard(
-  client: ReturnType<typeof github.getOctokit>,
+  client: InstanceType<typeof GitHub>,
   options: Options,
   log = core.info,
 ) {
@@ -159,7 +160,7 @@ mutation($projectId: ID!, $itemId: ID!) {
 }
 
 async function updateChangedTimestamp(
-  client: ReturnType<typeof github.getOctokit>,
+  client: InstanceType<typeof GitHub>,
   options: Options,
   log = core.info,
 ) {

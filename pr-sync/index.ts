@@ -23,11 +23,9 @@ async function main() {
   const projectId = core.getInput('project-id', { required: false });
   const excludedUsers = core.getInput('excluded-users', { required: false });
   const owningTeams = core.getInput('owning-teams', { required: false });
-  const token = core.getInput('github-token', { required: true });
   const shouldAutoAssign =
     core.getBooleanInput('auto-assign', { required: false }) ?? true;
 
-  const userClient = github.getOctokit(token);
   const client = createAppClient();
 
   const owningTeam = await getPrOwner(
@@ -55,11 +53,7 @@ async function main() {
 
   const actions = [
     syncProjectBoard(client, commonOptions, mkLog('sync-project-board')),
-    approveRenovatePRs(
-      userClient,
-      commonOptions,
-      mkLog('approve-renovate-prs'),
-    ),
+    approveRenovatePRs(client, commonOptions, mkLog('approve-renovate-prs')),
   ];
 
   if (shouldAutoAssign) {
@@ -72,5 +66,4 @@ async function main() {
 main().catch(error => {
   core.error(error.stack);
   core.setFailed(String(error));
-  process.exit(1);
 });
